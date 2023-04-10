@@ -18,7 +18,7 @@ import com.example.testdemo.databinding.ActivityMainBinding
 import java.io.File
 import kotlin.concurrent.thread
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
