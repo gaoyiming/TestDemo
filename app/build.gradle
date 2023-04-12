@@ -55,32 +55,33 @@ dependencies {
 }
 
 
+//ec文件解析函数
 def coverageSourceDirs = [
         '../app/src/main/java'
 ]
+task jacocoTestReport(type: JacocoReport) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        csv.enabled = true
+    }
+    classDirectories.from = fileTree(
+            dir: './build/intermediates/javac/debug',
+            excludes: ['**/R*.class',
+                       '**/*$InjectAdapter.class',
+                       '**/*$ModuleAdapter.class',
+                       '**/*$ViewInjector*.class'
+            ])
+    sourceDirectories.from = files(coverageSourceDirs)
+    executionData.from = files("$buildDir/outputs/code-coverage/connected/coverage.ec")
 
-//task jacocoTestReport(type: JacocoReport) {
-//    group = "Reporting"
-//    description = "Generate Jacoco coverage reports after running tests."
-//    reports {
-//        xml.enabled = true
-//        html.enabled = true
-//    }
-//    classDirectories = fileTree(
-//            dir: './build/intermediates/app_classes/debug',
-//            excludes: ['**/R*.class',
-//                       '**/*$InjectAdapter.class',
-//                       '**/*$ModuleAdapter.class',
-//                       '**/*$ViewInjector*.class'
-//            ])
-//    sourceDirectories = files(coverageSourceDirs)
-//    executionData = files("$buildDir/outputs/code-coverage/connected/coverage.ec")
-//
-//    doFirst {
-//        new File("$buildDir/intermediates/app_classes/").eachFileRecurse { file ->
-//            if (file.name.contains('$$')) {
-//                file.renameTo(file.path.replace('$$', '$'))
-//            }
-//        }
-//    }
-//}
+    doFirst {
+        new File("$buildDir/intermediates/javac/").eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+}
